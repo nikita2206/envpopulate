@@ -3,6 +3,10 @@ FROM rust:latest
 WORKDIR /usr/src/app
 COPY . .
 
-RUN cargo install --path .
+RUN cargo build --release
 
-CMD ["envpopulate"]
+FROM alpine:latest
+
+COPY --from=0 /usr/src/app/target/release/envpopulate /usr/src/app
+
+CMD ["/usr/src/app/envpopulate"]

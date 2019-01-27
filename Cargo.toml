@@ -3,6 +3,8 @@ name = "envpopulate"
 version = "0.1.0"
 authors = ["Nikita Nefedov <inefedor@gmail.com>"]
 edition = "2018"
+description = "If you have a `.env.dist` file committed in GIT and after a recent `git pull` it has been changed, so now you need to add those new env-variables to your own `.env`. This should be as easy as running `envpopulate`."
+license = "MIT"
 
 [dependencies]
 text_io = "0.1.7"

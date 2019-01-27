@@ -7,6 +7,8 @@ RUN cargo build --release
 
 FROM alpine:latest
 
-COPY --from=0 /usr/src/app/target/release/envpopulate /usr/src/app
+RUN apk add libc6-compat libgcc
+
+COPY --from=0 /usr/src/app/target/release/envpopulate /usr/src/app/envpopulate
 
 CMD ["/usr/src/app/envpopulate"]

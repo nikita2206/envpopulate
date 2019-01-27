@@ -27,5 +27,5 @@ In order from simplest to hardest:
  - install using Cargo: `cargo install envpopulate`
  - checkout this repo using GIT and build with `cargo build`
  - using Docker run in directory containing your `.env.dist` file: 
- `docker run --rm -v "$PWD":/usr/src/env -w /usr/src/env nikita2206/envpopulate:latest`
+ `docker run --rm -ti -v "$PWD":/usr/src/env -w /usr/src/env nikita2206/envpopulate:latest`
  

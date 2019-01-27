@@ -9,8 +9,9 @@ add those new env-variables to your own `.env`.
 This should be as easy as running `envpopulate`.
 
 Upon running it, you will be asked if you want to enter
-custom values for every variable, if you don't want any
-interactivity then you need to include `--quiet` option.
+custom values for every variable that doesn't yet exist in 
+`.env`, if you don't want any interactivity then you need 
+to include `--quiet` option.
 
 Building
 --------
@@ -25,3 +26,6 @@ In order from simplest to hardest:
  up in the top of this repo's page
  - install using Cargo: `cargo install envpopulate`
  - checkout this repo using GIT and build with `cargo build`
+ - using Docker run in directory containing your `.env.dist` file: 
+ `docker run -rm -v "$PWD":/usr/src/app -w /usr/src/app `
+ 

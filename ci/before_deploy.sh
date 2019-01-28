@@ -20,9 +20,8 @@ main() {
     # TODO Update this to build the artifacts that matter to you
     cross rustc --bin envpopulate --target $TARGET --release -- -C lto
 
-    ls target/x86_64-pc-windows-gnu/release
     # TODO Update this to package the right artifacts
-    cp target/$TARGET/release/envpopulate $stage/
+    cp target/$TARGET/release/envpopulate* $stage/
 
 
     cd $stage

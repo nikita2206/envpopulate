@@ -1,25 +1,38 @@
 #[macro_use] extern crate text_io;
+extern crate clap;
 
 use std::io::{BufRead, BufReader, Error, ErrorKind, Write};
 use std::fs::File;
 use std::fs::OpenOptions;
 use std::collections::HashMap;
-use std::env;
+use clap::{Arg, App};
 
 fn main() -> std::io::Result<()> {
-    const ENV_FILE: &str = ".env";
-    const ENV_DIST_FILE: &str = ".env.dist";
+    let args = App::new("envpopulate")
+        .version("0.1.0")
+        .author("Nikita Nefedov <inefedor@gmail.com>")
+        .about("Populate your .env file from distribution .env.dist interactively and incrementally")
+        .arg(Arg::with_name("quiet")
+            .short("q").long("quiet")
+            .help("Don't ask for user input on each env-variable, just take the values from distribution file"))
+        .arg(Arg::with_name("env")
+            .long("env")
+            .help("Custom filename of your .env file")
+            .takes_value(true)
+            .default_value(".env"))
+        .arg(Arg::with_name("env-dist")
+            .long("env-dist")
+            .help("Custom filename of your .env.dist (distribution) file, this file will be taken as a source of defaults")
+            .takes_value(true)
+            .default_value(".env.dist"))
+        .get_matches();
 
-    if env::args().any(|arg| arg.eq(&String::from("--help")) || arg.eq(&String::from("-h"))) {
-        println!("usage: envpopulate [--quiet|-q]");
+    let env_file_name = args.value_of("env").unwrap_or(".env");
+    let env_dist_file_name = args.value_of("env-dist").unwrap_or(".env.dist");
+    let quiet = args.is_present("quiet");
 
-        return Ok(());
-    }
-
-    let quiet = env::args().any(|arg| arg.eq(&String::from("--quiet")) || arg.eq(&String::from("-q")));
-
-    let env_file = File::open(ENV_FILE);
-    let env_dist_file = match File::open(ENV_DIST_FILE) {
+    let env_file = File::open(env_file_name);
+    let env_dist_file = match File::open(env_dist_file_name) {
         Ok(f) => f,
         Err(err) => return Err(Error::new(ErrorKind::Other, format!("Couldn't open .env.dist: {}", err.to_string())))
     };
@@ -58,7 +71,7 @@ fn main() -> std::io::Result<()> {
         .write(true)
         .create(true)
         .append(true)
-        .open(ENV_FILE)?;
+        .open(env_file_name)?;
 
     for (key, value) in env_dist_entries.iter() {
         if ! env_entries.contains_key(key) {

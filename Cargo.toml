@@ -8,3 +8,4 @@ license = "MIT"
 
 [dependencies]
 text_io = "0.1.7"
+clap = "2.32.0"

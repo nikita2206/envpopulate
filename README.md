@@ -22,7 +22,8 @@ dependencies like an interpreter or a VM and it could be easily
 bundled in a docker container.
 
 Here's how you can get an executable in order from simplest to hardest:
- - download already-built binaries from the latest [Release](https://github.com/nikita2206/envpopulate/releases/latest)
+ - download already-built binaries from the [latest release](https://github.com/nikita2206/envpopulate/releases/latest), 
+ this includes: Linux builds for various architectures, OS X builds for x86_64 and i686, and a Windows GNU build
  - using Docker run in directory containing your `.env.dist` file: 
  `docker run --rm -ti -v "$PWD":/usr/src/env -w /usr/src/env nikita2206/envpopulate:latest`
  - install using Cargo: `cargo install envpopulate`

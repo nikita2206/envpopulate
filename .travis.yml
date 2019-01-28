@@ -1,8 +1,18 @@
 os:
-  - linux
-  - osx
-  - windows
+- linux
+- osx
+- windows
 language: rust
 rust:
-  - stable
+- stable
 cache: cargo
+jobs:
+  include:
+  - stage: GitHub Release
+    deploy:
+      provider: releases
+      api_key:
+        secure: U58onXXZTGDDPR0tpklYDqURGx45DhaHwQ78pacmzXVbHU83kxuRd8n+6O93wuW/yWCzXt84M4ODpyKORA0E82wRElHTYA4zbylaYsGpU+P+Dbagiiupqst56xGs+uGc6nEL4BrfpZ7Oe/FUxaT1ivXQiqd4G/p19ro5Xho9piRAQZMHGLuD8yCRkVWGnXBWSsotuEm4cOzMkHc1aa0vir0i4NUoLcJumwSABW6qY69NMJKmcKrExv8trioCF2WDmhUMoBi8MVMJCwEi/adGB2YRynERXlve3tjJvbvq3hZqB6spK6dQi2K/sNoLJx/LDB+6F79AdO4PdJ0mRfRiQ8X4VKcOKUUEODo5C44pQ0yjHRbLzIqyyW/rrztKP9xwenmxQtyLFyaogoyxIKAg+iUelKSmlBVe/UzWPlVAFP1uW1+LUtScj9ekJsQPOcwGyD+o9t95xE5NCJ7cWR1LbWgONnw6myxGEpE0657IA6mfU+pWJ8kpozqPQCvmQ3sM0c6UJq9ai7o+WGmoIljPwsSQDVYGORa1oHKk4+q8MKtpaD0BhroUfnA/3DUUruXSXyTVVBLMVsEpOQr4koQ3r0MNqtGtV5R99Svm/7iZgmrYmsZYNpgcX1zGfojn+vRxugt5TKIgYP4jRfnocu+G01egNgsXn1RVDjxXwyBwpXs=
+      skip_cleanup: true
+      on:
+        repo: nikita2206/envpopulate

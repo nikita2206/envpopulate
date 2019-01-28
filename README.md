@@ -23,8 +23,8 @@ bundled in a docker container.
 
 Here's how you can get an executable in order from simplest to hardest:
  - download already-built binaries from the latest [Release](https://github.com/nikita2206/envpopulate/releases/latest)
- - install using Cargo: `cargo install envpopulate`
- - checkout this repo using GIT and build with `cargo build`
  - using Docker run in directory containing your `.env.dist` file: 
  `docker run --rm -ti -v "$PWD":/usr/src/env -w /usr/src/env nikita2206/envpopulate:latest`
+ - install using Cargo: `cargo install envpopulate`
+ - checkout this repo using GIT and build with `cargo build`
  

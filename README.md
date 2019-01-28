@@ -21,7 +21,7 @@ a small binary executable that doesn't require any additional
 dependencies like an interpreter or a VM and it could be easily
 bundled in a docker container.
 
-In order from simplest to hardest:
+Here's how you can get an executable in order from simplest to hardest:
  - download already-built binaries from the latest [Release](https://github.com/nikita2206/envpopulate/releases/latest)
  - install using Cargo: `cargo install envpopulate`
  - checkout this repo using GIT and build with `cargo build`

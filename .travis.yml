@@ -67,7 +67,8 @@ deploy:
   file_glob: true
   file: $CRATE_NAME-$TRAVIS_TAG-$TARGET_NAME.*
   on:
-    tags: true
+    #tags: true
+    repo: nikita2206/envpopulate
   provider: releases
   skip_cleanup: true
 

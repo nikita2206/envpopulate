@@ -15,39 +15,35 @@ matrix:
   include:
 
     # Linux
-#    - env: TARGET=aarch64-unknown-linux-gnu
-#    - env: TARGET=arm-unknown-linux-gnueabi
-#    - env: TARGET=armv7-unknown-linux-gnueabihf
-#    - env: TARGET=i686-unknown-linux-gnu
-#    - env: TARGET=i686-unknown-linux-musl
-#    - env: TARGET=mips-unknown-linux-gnu
-#    - env: TARGET=mips64-unknown-linux-gnuabi64
-#    - env: TARGET=mips64el-unknown-linux-gnuabi64
-#    - env: TARGET=mipsel-unknown-linux-gnu
-#    - env: TARGET=powerpc-unknown-linux-gnu
-#    - env: TARGET=powerpc64-unknown-linux-gnu
-#    - env: TARGET=powerpc64le-unknown-linux-gnu
-#    - env: TARGET=s390x-unknown-linux-gnu DISABLE_TESTS=1
-    - env:
-      - TARGET=x86_64-unknown-linux-gnu
-      - TARGET_READABLE=x86_64-linux-gnu
-    - env:
-      - TARGET=x86_64-unknown-linux-musl
-      - TARGET_READABLE=x86_64-linux-musl
+    - env: TARGET=aarch64-unknown-linux-gnu TARGET_NAME=linux-aarch64-gnu
+    - env: TARGET=arm-unknown-linux-gnueabi TARGET_NAME=linux-arm-gnueabi
+    - env: TARGET=armv7-unknown-linux-gnueabihf TARGET_NAME=linux-armv7-gnueabihf
+    - env: TARGET=i686-unknown-linux-gnu TARGET_NAME=linux-i686-gnu
+    - env: TARGET=i686-unknown-linux-musl TARGET_NAME=linux-i686-musl
+    - env: TARGET=mips-unknown-linux-gnu TARGET_NAME=linux-mips-gnu
+    - env: TARGET=mips64-unknown-linux-gnuabi64 TARGET_NAME=linux-mips64-gnuabi64
+    - env: TARGET=mips64el-unknown-linux-gnuabi64 TARGET_NAME=linux-mips64el-gnuabi64
+    - env: TARGET=mipsel-unknown-linux-gnu TARGET_NAME=linux-mipsel-gnu
+    - env: TARGET=powerpc-unknown-linux-gnu TARGET_NAME=linux-powerpc-gnu
+    - env: TARGET=powerpc64-unknown-linux-gnu TARGET_NAME=linux-powerpc64-gnu
+    - env: TARGET=powerpc64le-unknown-linux-gnu TARGET_NAME=linux-powerpc64le-gnu
+    - env: TARGET=s390x-unknown-linux-gnu TARGET_NAME=linux-s390x-gnu DISABLE_TESTS=1
+    - env: TARGET=x86_64-unknown-linux-gnu TARGET_NAME=linux-x86_64-gnu
+    - env: TARGET=x86_64-unknown-linux-musl TARGET_NAME=linux-x86_64-musl
 
     # OSX
-#    - env: TARGET=i686-apple-darwin
+#    - env: TARGET=i686-apple-darwin TARGET_NAME=osx-i686
 #      os: osx
-#    - env: TARGET=x86_64-apple-darwin
+#    - env: TARGET=x86_64-apple-darwin TARGET_NAME=osx-x86_64
 #      os: osx
 
     # *BSD
-#    - env: TARGET=i686-unknown-freebsd DISABLE_TESTS=1
-#    - env: TARGET=x86_64-unknown-freebsd DISABLE_TESTS=1
-#    - env: TARGET=x86_64-unknown-netbsd DISABLE_TESTS=1
+    - env: TARGET=i686-unknown-freebsd TARGET_NAME=freebsd-i686 DISABLE_TESTS=1
+    - env: TARGET=x86_64-unknown-freebsd TARGET_NAME=freebsd-x86_64 DISABLE_TESTS=1
+    - env: TARGET=x86_64-unknown-netbsd TARGET_NAME=netbsd-x86_64 DISABLE_TESTS=1
 
     # Windows
-#    - env: TARGET=x86_64-pc-windows-gnu
+    - env: TARGET=x86_64-pc-windows-gnu TARGET_NAME=windows-x86_64-gnu
 
 before_install:
   - set -e
@@ -69,12 +65,9 @@ deploy:
   api_key:
     secure: iAANKduP2lubHQ4v/CzdoMGVscvj/gmNrKnFtDLAQJy0xGddKV8zz7DDzPIxA+noZgRQygkjVKMbnjykITi4FDBox7mahFlz6vBf8W+j+JR9nh477TiGKd+AGLvqCAgL4kcsCyWqoSm8fnJx9QRz0tzDqwh1n5X9zk5B9oaORa5/Lh2oZ6G5+sdQDiS0zBrlGzAi3k94SZq76HBkE4gEgYu/tNre6HwLtafVRT5QG6EFlgioxgSOn4YlURyerDb+WKgp2WoAMbNG9j01HhkmzDXhxOl56g9Ta++VC5LgIOmV3MFV33vu9gSaT9r0ktgI4dqqcntJsFT/27H9pW2d7lC5a14L4uUYp6EPayWfPtgVU0v5B5YHHvdS5pJwwUK70O/iSmyBsNSfqe1RSaNYeQooICJmtU0yimN533liQy90P01RZbZPoKoxYO30m6CqZMPUYxhuS/VwXu+tAaYeKw3J21/Dd8dTBvNF9EaokWamIFoLdTHdXGaxMZOsntBAQbRebQVrZpAFBLlss4VLuxAD9Ywrtq4z+INztWgGuG4Fn9NX0ObECoAFJrNcC9n3GFx7Do9SxOYaW+cIbx6oGy8X28pR7KVPVjaRDnOlVyOTNbeWMEuPgZDxjhIAk5ggLglr/ML2TyySYYEDvw5nrGeFD6Zt0SM9RQ5Pys8nW+0=
   file_glob: true
-  file: $CRATE_NAME-$TRAVIS_TAG-$TARGET.*
-#  on:
-#    condition: $TRAVIS_RUST_VERSION = stable
-#    tags: true
+  file: $CRATE_NAME-$TRAVIS_TAG-$TARGET_NAME.*
   on:
-    repo: nikita2206/envpopulate
+    tags: true
   provider: releases
   skip_cleanup: true
 

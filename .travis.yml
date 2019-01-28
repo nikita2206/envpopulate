@@ -1,0 +1,8 @@
+os:
+  - linux
+  - osx
+  - windows
+language: rust
+rust:
+  - stable
+cache: cargo

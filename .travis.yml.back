@@ -1,0 +1,106 @@
+
+language: rust
+rust:
+  - stable
+cache: cargo
+
+matrix:
+  include:
+    - os: linux
+      rust: stable
+      env: TARGET=aarch64-unknown-linux-gnu
+      # need Trusty because the glibc in Precise is too old and doesn't support 64-bit arm
+      dist: trusty
+      sudo: required
+      # Extra packages only for this job
+      addons:
+        apt:
+          packages: &aarch64_unknown_linux_gnu
+          # Transparent emulation
+          - qemu-user-static
+          - binfmt-support
+    - os: linux
+      rust: stable
+      env: TARGET=armv7-unknown-linux-gnueabihf
+      # sudo is needed for binfmt_misc, which is needed for transparent user qemu emulation
+      sudo: required
+      addons:
+        apt:
+          packages: &armv7_unknown_linux_gnueabihf
+          # Cross compiler and cross compiled C libraries
+          - gcc-arm-linux-gnueabihf
+          - libc6-armhf-cross
+          - libc6-dev-armhf-cross
+          # Transparent emulation
+          - qemu-user-static
+          - binfmt-support
+    - os: osx
+      rust: stable
+      env: TARGET=i686-apple-darwin
+    - os: linux
+      rust: stable
+      env: TARGET=i686-unknown-linux-gnu
+      addons:
+        apt:
+          packages: &i686_unknown_linux_gnu
+          # Cross compiler and cross compiled C libraries
+          - gcc-multilib
+    - os: linux
+      rust: stable
+      env: TARGET=i686-unknown-linux-musl
+      dist: trusty
+      sudo: required
+      addons:
+        apt:
+          packages: &musl_packages
+          - musl
+          - musl-dev
+          - musl-tools
+    - os: osx
+      rust: stable
+      env: TARGET=x86_64-apple-darwin
+    - os: linux
+      rust: stable
+      env: TARGET=x86_64-unknown-linux-gnu
+    - os: linux
+      rust: stable
+      env: TARGET=x86_64-unknown-linux-musl
+      dist: trusty
+      sudo: required
+      addons:
+        apt:
+          packages: *musl_packages
+
+before_install:
+  - export PATH="$PATH:$HOME/.cargo/bin"
+
+install:
+  - bash ci/install.sh
+
+script: echo "Publishing binaries to GitHub releases"
+
+before_deploy:
+  - bash ci/before_deploy.sh
+
+deploy:
+  provider: releases
+  api_key:
+    secure: iAANKduP2lubHQ4v/CzdoMGVscvj/gmNrKnFtDLAQJy0xGddKV8zz7DDzPIxA+noZgRQygkjVKMbnjykITi4FDBox7mahFlz6vBf8W+j+JR9nh477TiGKd+AGLvqCAgL4kcsCyWqoSm8fnJx9QRz0tzDqwh1n5X9zk5B9oaORa5/Lh2oZ6G5+sdQDiS0zBrlGzAi3k94SZq76HBkE4gEgYu/tNre6HwLtafVRT5QG6EFlgioxgSOn4YlURyerDb+WKgp2WoAMbNG9j01HhkmzDXhxOl56g9Ta++VC5LgIOmV3MFV33vu9gSaT9r0ktgI4dqqcntJsFT/27H9pW2d7lC5a14L4uUYp6EPayWfPtgVU0v5B5YHHvdS5pJwwUK70O/iSmyBsNSfqe1RSaNYeQooICJmtU0yimN533liQy90P01RZbZPoKoxYO30m6CqZMPUYxhuS/VwXu+tAaYeKw3J21/Dd8dTBvNF9EaokWamIFoLdTHdXGaxMZOsntBAQbRebQVrZpAFBLlss4VLuxAD9Ywrtq4z+INztWgGuG4Fn9NX0ObECoAFJrNcC9n3GFx7Do9SxOYaW+cIbx6oGy8X28pR7KVPVjaRDnOlVyOTNbeWMEuPgZDxjhIAk5ggLglr/ML2TyySYYEDvw5nrGeFD6Zt0SM9RQ5Pys8nW+0=
+  skip_cleanup: true
+  on:
+    repo: nikita2206/envpopulate
+  file_glob: true
+  file: ${PROJECT_NAME}-${TRAVIS_TAG}-${TARGET}.*
+
+#jobs:
+#  include:
+#  - stage: GitHub Release
+#    deploy:
+#      provider: releases
+#      api_key:
+#        secure: iAANKduP2lubHQ4v/CzdoMGVscvj/gmNrKnFtDLAQJy0xGddKV8zz7DDzPIxA+noZgRQygkjVKMbnjykITi4FDBox7mahFlz6vBf8W+j+JR9nh477TiGKd+AGLvqCAgL4kcsCyWqoSm8fnJx9QRz0tzDqwh1n5X9zk5B9oaORa5/Lh2oZ6G5+sdQDiS0zBrlGzAi3k94SZq76HBkE4gEgYu/tNre6HwLtafVRT5QG6EFlgioxgSOn4YlURyerDb+WKgp2WoAMbNG9j01HhkmzDXhxOl56g9Ta++VC5LgIOmV3MFV33vu9gSaT9r0ktgI4dqqcntJsFT/27H9pW2d7lC5a14L4uUYp6EPayWfPtgVU0v5B5YHHvdS5pJwwUK70O/iSmyBsNSfqe1RSaNYeQooICJmtU0yimN533liQy90P01RZbZPoKoxYO30m6CqZMPUYxhuS/VwXu+tAaYeKw3J21/Dd8dTBvNF9EaokWamIFoLdTHdXGaxMZOsntBAQbRebQVrZpAFBLlss4VLuxAD9Ywrtq4z+INztWgGuG4Fn9NX0ObECoAFJrNcC9n3GFx7Do9SxOYaW+cIbx6oGy8X28pR7KVPVjaRDnOlVyOTNbeWMEuPgZDxjhIAk5ggLglr/ML2TyySYYEDvw5nrGeFD6Zt0SM9RQ5Pys8nW+0=
+#      skip_cleanup: true
+#      on:
+#        repo: nikita2206/envpopulate
+#      file_glob: true
+#      file: ${PROJECT_NAME}-${TRAVIS_TAG}-${TARGET}.*
